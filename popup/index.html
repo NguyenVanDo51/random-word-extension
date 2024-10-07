@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vocabulary Notifier</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Add Vocabulary</h1>
+      <textarea
+        id="vocabInput"
+        placeholder="Enter new words, format: word,meaning. One per line."
+        autofocus
+      ></textarea>
+      <button id="saveButton">Save Words</button>
+      <p id="statusMessage"></p>
+
+      <!-- Nút bật/tắt bóng bay -->
+      <label for="toggleBalloon">
+        <input type="checkbox" id="toggleBalloon" />
+        Show Balloons
+      </label>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

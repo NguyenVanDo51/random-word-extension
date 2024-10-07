@@ -1,56 +1,87 @@
-const words = [
-  { word: 'elucidate', meaning: 'make something clear; explain' },
-  { word: 'cogent', meaning: 'clear, logical, and convincing' },
-  { word: 'efficacy', meaning: 'the ability to produce a desired or intended result' },
-]
+const MIN_INTERVAL = 15 * 1000;
+const MAX_INTERVAL = 20 * 1000
 
-function getRandomWord() {
-  const randomIndex = Math.floor(Math.random() * words.length)
-  return words[randomIndex]
+function getRandomWord(callback) {
+  chrome.storage?.sync?.get(
+    ["vocabWords", "balloonEnabled"],
+    function (result) {
+      console.log("result", result);
+      if (result.balloonEnabled !== undefined && !result.balloonEnabled) {
+        return;
+      }
+
+      const words = result.vocabWords || []; // Kiểm tra nếu không có từ nào đã lưu
+      console.log("words", words);
+      if (words.length > 0) {
+        const randomIndex = Math.floor(Math.random() * words.length); // Chọn từ ngẫu nhiên
+        callback(words[randomIndex]); // Truyền từ ngẫu nhiên cho callback
+      } else {
+        callback(null); // Nếu không có từ nào, callback sẽ là null
+      }
+    }
+  );
 }
 
-function createBalloon(wordObj) {
-  // Tạo thẻ div cho bóng bay
-  const balloon = document.createElement('div');
-  balloon.className = 'vocab-balloon';
 
-  // Thêm nội dung từ vựng vào bóng bay
+
+const createBallon = () => {
+  function random(num) {
+    return Math.floor(Math.random() * num);
+  }
+
+  function getRandomStyles() {
+    var r = random(255);
+    var g = random(255);
+    var b = random(255);
+    var ml = random(window.innerWidth - 105);
+    var dur = random(5) + 10;
+
+    return `
+    background-color: rgba(${r},${g},${b},0.7);
+    box-shadow: inset -7px -3px 10px rgba(${r - 10},${g - 10},${b - 10},0.7);
+    margin: 0 0 0 ${ml}px;
+    color: rgba(${r},${g},${b},0.7); 
+    animation: float ${dur}s ease-in infinite, leftright 4s ease-in-out infinite
+    `;
+  }
+
+  var balloon = document.createElement("div");
+  balloon.className = "balloon";
+  balloon.style.cssText = getRandomStyles();
+
   balloon.innerHTML = `
-    <div class="balloon-content">
-      <strong>${wordObj.word}</strong>: ${wordObj.meaning}
-    </div>
-    <div class="balloon-tail"></div>
+      <span class="balloon-text">
+        <strong>${wordObj.word}</strong>
+        ${wordObj.meaning}
+      </span>
   `;
+  return balloon;
+};
 
-  // Tạo vị trí ngẫu nhiên theo chiều ngang màn hình
-  const randomLeft = Math.random() * (window.innerWidth - 100); // Trừ đi 100 để không ra ngoài màn hình
-  balloon.style.left = `${randomLeft}px`;
+function createAnimation(wordObj) {
+  if (!wordObj) return; // Nếu không có từ, không làm gì
 
-  // Thêm bóng bay vào trang
+  const balloon = createBallon(wordObj);
+
   document.body.appendChild(balloon);
-
-  // Bóng bay từ dưới lên trên rồi biến mất
-  setTimeout(() => {
-    balloon.style.bottom = `${window.innerHeight}px`;  // Bóng bay lên trên
-  }, 100);  // Bắt đầu di chuyển sau 0.1 giây
-
-  // Xóa bóng bay sau khi hoàn thành hiệu ứng
   setTimeout(() => {
     balloon.remove();
-  }, 10000); // Bóng bay tồn tại trong 10 giây
+  }, 10000);
 }
 
 function startVocabularyBalloons() {
-  const randomWord = getRandomWord()
-  createBalloon(randomWord)
+  getRandomWord((randomWord) => {
+    createAnimation(randomWord);
+  });
 
   setInterval(() => {
-    const randomWord = getRandomWord()
-    createBalloon(randomWord)
-  }, Math.random() * (30000 - 15000) + 15000) // Ngẫu nhiên từ 15-30 giây
+    getRandomWord((randomWord) => {
+      createAnimation(randomWord);
+    });
+  }, Math.random() * (MAX_INTERVAL - MIN_INTERVAL) + MIN_INTERVAL); // Ngẫu nhiên từ 15-30 giây
 }
 
-startVocabularyBalloons()
+startVocabularyBalloons();
 
 // Khởi động khi trang web tải
 // window.addEventListener('load', startVocabularyBalloons)

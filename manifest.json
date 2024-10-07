@@ -3,7 +3,7 @@
   "name": "Vocabulary Notifier",
   "version": "1.0",
   "description": "Displays a random English word every 15-30 seconds on the webpage.",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "storage"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -12,7 +12,7 @@
     }
   ],
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "popup/index.html",
     "default_title": "Vocabulary Notifier"
   }
 }
