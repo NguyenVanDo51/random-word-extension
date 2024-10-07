@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Vocabulary Notifier",
+  "version": "1.0",
+  "description": "Displays a random English word every 15-30 seconds on the webpage.",
+  "permissions": ["activeTab", "scripting"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Vocabulary Notifier"
+  }
+}
