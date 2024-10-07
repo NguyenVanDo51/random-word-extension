@@ -3,11 +3,15 @@
   "name": "Vocabulary Notifier",
   "version": "1.0",
   "description": "Displays a random English word every 15-30 seconds on the webpage.",
-  "permissions": ["activeTab", "scripting", "storage"],
+  "permissions": ["activeTab", "tabs", "scripting", "storage"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "js": ["utils/index.js", "libs/gsap.min.js", "content.js"],
       "css": ["styles.css"]
     }
   ],

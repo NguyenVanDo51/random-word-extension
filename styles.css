@@ -2,28 +2,18 @@ body {
   margin: 0;
 }
 
-#balloon-container {
-  height: 100vh;
-  padding: 1em;
-  box-sizing: border-box;
-  display: flex;
-  flex-wrap: wrap;
-  overflow: hidden;
-  transition: opacity 500ms;
-}
-
 .balloon {
   height: 125px;
   width: 105px;
   border-radius: 75% 75% 70% 70%;
   position: fixed;
   bottom: 0;
-  z-index: 999;
+  z-index: 99999999;
 }
 
 .balloon .balloon-text {
   color: #FFF;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
