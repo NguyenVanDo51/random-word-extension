@@ -1,19 +1,45 @@
-.vocab-notification {
+.vocab-balloon {
   position: fixed;
-  bottom: 10px;
-  right: 10px;
-  background-color: #333;
-  color: #fff;
+  bottom: 0;
+  background-color: #ff6666;
+  color: white;
   padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 50% 50% 50% 0;
+  width: auto;
+  height: auto;
   z-index: 1000;
   font-size: 16px;
-  max-width: 300px;
+  transition: bottom 8s ease-in-out; /* Bóng bay từ dưới lên trên trong 8 giây */
+  opacity: 0.9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vocab-balloon .balloon-content {
+  text-align: center;
+  padding: 10px;
+  max-width: 200px;
   word-wrap: break-word;
 }
 
-.vocab-notification strong {
+.vocab-balloon .balloon-tail {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 20px solid #ff6666;
+  margin-top: -10px;
+}
+
+/* Kích thước bóng bay thay đổi theo nội dung */
+.vocab-balloon strong {
   font-size: 18px;
-  color: #ffcc00;
+  color: yellow;
+}
+
+.vocab-balloon {
+  width: auto;
+  height: auto;
+  padding: 10px;
 }
