@@ -25,9 +25,10 @@ const createCar = (wordObj) => {
   let word = document.createElement('div')
   car.classList.add('car')
   word.classList.add('word')
+  const extensionId = chrome.runtime.id
 
   // Thêm nội dung từ mới
-  word.textContent = `${wordObj.word} - ${wordObj.meaning}`
+  word.innerHTML = `<span>${wordObj.word}</span>${wordObj.meaning}`
 
   // Thêm phần tử vào body
   document.body.appendChild(car)
@@ -35,46 +36,57 @@ const createCar = (wordObj) => {
 
   // Định nghĩa CSS
   const style = document.createElement('style')
+  const imageUrl = `chrome-extension://${extensionId}/images/car.gif`
+
   style.textContent = `
 .car {
-  width: 100px;
-  height: 50px;
-  background: url('https://cdn-icons-png.flaticon.com/512/2844/2844843.png') no-repeat center;
+  width: 200px;
+  height: 200px;
+  background: url(${imageUrl}) no-repeat center;
   background-size: contain;
   position: fixed;
-  bottom: 20px;
-  left: -150px;
+  bottom: 0px;
+  left: -134px;
   z-index: 1000;
 }
 .word {
   position: fixed;
-  bottom: 30px;
-  left: -150px;
-  font-size: 24px;
-  font-weight: bold;
-  color: red;
+  bottom: 122px;
+  height: 40px;
+  color: #ff5252;
   z-index: 1000;
+  width: 100px;
+  left: -100px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 `
   document.head.appendChild(style)
 
-  // Animation với GSAP
   gsap.to('.car', {
     duration: 15,
     x: window.innerWidth + 150,
-    ease: 'power1.inOut',
   })
 
   gsap.to('.word', {
     duration: 15,
     x: window.innerWidth + 150,
-    ease: 'power1.inOut',
     onComplete: () => {
       document.body.removeChild(car)
       document.body.removeChild(word)
     },
   })
+
+  setTimeout(() => {
+    document.body.removeChild(car)
+    document.body.removeChild(word)
+  }, 15000)
 }
+
+// createCar({ meaning: "Xin chao", word: "Hello" })
 
 const createBallon = (wordObj) => {
   function random(num) {

@@ -15,6 +15,12 @@
       "css": ["styles.css"]
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["images/car.gif"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "action": {
     "default_popup": "popup/index.html",
     "default_title": "Vocabulary Notifier"
