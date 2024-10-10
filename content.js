@@ -13,10 +13,26 @@
 
   function createAnimation(wordObj) {
     if (!wordObj) return // Nếu không có từ, không làm gì
+    // function return a random number between a range
 
-    createBallon(wordObj)
-    createCar(wordObj)
+    const randomNumber = getRandomNumber(1, 2)
+    console.log('randomNumber', randomNumber)
+    switch (randomNumber) {
+      case 1:
+        createCar(wordObj)
+        break
+      case 2:
+        createBallon(wordObj)
+        break
+    }
   }
+  const MIN_INTERVAL = 30 * 1000
+
+  setInterval(() => {
+    getRandomWord((w) => {
+      createAnimation(w)
+    })
+  }, MIN_INTERVAL)
 })()
 
 const createCar = (wordObj) => {
@@ -65,25 +81,21 @@ const createCar = (wordObj) => {
 }
 `
   document.head.appendChild(style)
-
+  const dur = 15
   gsap.to('.car', {
-    duration: 15,
-    x: window.innerWidth + 150,
+    duration: dur,
+    x: window.innerWidth + 200,
   })
 
   gsap.to('.word', {
-    duration: 15,
-    x: window.innerWidth + 150,
-    onComplete: () => {
-      document.body.removeChild(car)
-      document.body.removeChild(word)
-    },
+    duration: dur,
+    x: window.innerWidth + 200,
   })
 
   setTimeout(() => {
     document.body.removeChild(car)
     document.body.removeChild(word)
-  }, 15000)
+  }, dur * 1000)
 }
 
 // createCar({ meaning: "Xin chao", word: "Hello" })
@@ -124,4 +136,28 @@ const createBallon = (wordObj) => {
   setTimeout(() => {
     balloon.remove()
   }, 10000)
+}
+
+const getRandomNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+function getRandomWord(callback) {
+  try {
+    chrome.storage?.sync?.get(['vocabWords', 'balloonEnabled'], function (result) {
+      if (result.balloonEnabled !== undefined && !result.balloonEnabled) {
+        return
+      }
+
+      const words = result.vocabWords || [] // Kiểm tra nếu không có từ nào đã lưu
+      if (words.length > 0) {
+        const randomIndex = Math.floor(Math.random() * words.length) // Chọn từ ngẫu nhiên
+        callback(words[randomIndex]) // Truyền từ ngẫu nhiên cho callback
+      } else {
+        callback(null) // Nếu không có từ nào, callback sẽ là null
+      }
+    })
+  } catch (e) {
+    callback(null)
+  }
 }

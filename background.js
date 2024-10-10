@@ -1,4 +1,4 @@
-const MIN_INTERVAL = 10 * 1000
+const MIN_INTERVAL = 30 * 1000
 
 function getRandomWord(callback) {
   try {
@@ -32,6 +32,5 @@ function sendMessageToActiveTab() {
     }
   })
 }
-
-// Gửi tín hiệu mỗi 10 giây
+console.log("BẮT ĐẦU BACKGROUND")
 setInterval(sendMessageToActiveTab, MIN_INTERVAL)
